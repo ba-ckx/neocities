@@ -1,29 +1,27 @@
-name: Deploy to neocities
-
-# only run on changes to main. Use main or master depending on whatever your default branch is called.
+name: Deploy to Neocities
 on:
   push:
-    branches:
-      - main
-
-concurrency: # prevent concurrent deploys doing strange things
-  group: deploy-to-neocities
-  cancel-in-progress: true
-
+    branches: [ main ]    # run on push to main branch (adjust if your default branch is different)
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-    # The checkout step copies your repo into the action runner. Important!
-    - uses: actions/checkout@v4
-    # When the dist_dir is ready, deploy it to neocities
-    # Here we deploy the folder named `public`
-    - name: Deploy to neocities
-      uses: bcomnes/deploy-to-neocities@v3
-      with:
-        api_key: ${{ secrets.NEOCITIES_API_TOKEN }}
-        cleanup: true
-        neocities_supporter: false # set this to true if you have a supporter account and want to bypass unsuported files filter.
-        preview_before_deploy: true # print a deployment plan prior to waiting for files to upload.
-        dist_dir: public
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'    # Use Node.js 18 LTS (for example)
+          cache: 'npm'          # Cache node_modules for faster builds
+
+      - name: Install dependencies
+        run: npm ci             # installs from package-lock for consistency
+
+      - name: Build site with Eleventy
+        run: npm run build      # runs Eleventy to generate _public/_
+
+      - name: Deploy to Neocities
+        uses: bcomnes/deploy-to-neocities@v3
+        with:
+          api_token: ${{ secrets.NEOCITIES_API_TOKEN }}
+          dist_dir: public      # folder to deploy (our Eleventy output)
+          cleanup: true         # remove files on Neocities that are not in our build
