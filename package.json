@@ -22,11 +22,3 @@
   }
 }
 
-// ELEVENTY/OBSIDIAN BLOG //
-
-{
-  "scripts": {
-    "dev": "eleventy --serve",
-    "build": "eleventy"
-  }
-}
