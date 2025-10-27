@@ -1,0 +1,14 @@
+{% include "header.njk" %}
+<div class="content-wrapper">  {# a container div for layout, use your site’s existing classes if any #}
+  <main class="post-content">
+    <h1>{{ title }}</h1>
+    <time datetime="{{ date.toISOString() }}">{{ date | dateReadable }}</time>
+    <article>
+      {{ content | safe }}   {# the rendered HTML of the Markdown #}
+    </article>
+  </main>
+  
+  {% include "sidebar.njk" %}
+
+</div>
+{% include "footer.njk" %}

@@ -1,0 +1,13 @@
+<aside class="blog-sidebar">
+  <h2>Archives</h2>
+  <ul class="archives-list">
+    {% for monthGroup in collections.postsByMonth %}
+      {% set monthKey = monthGroup.month %}
+      <li>
+        <a href="/blog/archive/{{ monthKey }}/">
+          {{ monthKey | monthYear }}  {# e.g. "October 2025" #}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</aside>

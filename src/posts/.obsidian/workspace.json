@@ -150,13 +150,23 @@
               "icon": "lucide-list",
               "title": "Sumário de hello-world"
             }
+          },
+          {
+            "id": "99811305ead85be3",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -166,9 +176,12 @@
       "daily-notes:Abrir a nota de hoje": false,
       "templates:Inserir modelo": false,
       "command-palette:Abrir paleta de comandos": false,
-      "bases:Criar nova base": false
+      "bases:Criar nova base": false,
+      "obsidian-git:Open Git source control": false
     }
   },
   "active": "de381172775450d3",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "posts.json"
+  ]
 }
