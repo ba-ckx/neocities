@@ -1,17 +1,21 @@
 // .eleventy.js (CommonJS)
 const { DateTime } = require("luxon");
 
-// helper: parse a valid Date or return null
+// helpers
 function asDate(v) {
   if (v instanceof Date && !isNaN(v)) return v;
   if (!v) return null;
   const d = new Date(v);
   return isNaN(d) ? null : d;
 }
+function monthKeyParts(ym) {
+  const m = /^(\d{4})-(\d{2})$/.exec(String(ym || ""));
+  return m ? { y: Number(m[1]), m: Number(m[2]) } : null;
+}
 
 module.exports = function (eleventyConfig) {
   //
-  // COLLECTIONS (defensive re: dates)
+  // Collections
   //
   eleventyConfig.addCollection("posts", (collectionApi) => {
     return collectionApi
@@ -36,7 +40,7 @@ module.exports = function (eleventyConfig) {
       })
       .sort((a, b) => b.__safeDate - a.__safeDate);
 
-    const groups = new Map(); // "YYYY-MM" -> [items]
+    const groups = new Map();
     for (const p of posts) {
       const d = p.__safeDate;
       const y = d.getUTCFullYear();
@@ -47,15 +51,16 @@ module.exports = function (eleventyConfig) {
     }
 
     return [...groups.entries()]
-      .sort((a, b) => (a[0] < b[0] ? 1 : -1)) // newest month first
+      .sort((a, b) => (a[0] < b[0] ? 1 : -1))
       .map(([month, items]) => ({ month, posts: items }));
   });
 
   //
-  // FILTERS (pt-BR, minúsculas)
+  // Filters
   //
   eleventyConfig.addFilter("datePt", (dateInput, comHora = false) => {
-    const d = dateInput instanceof Date ? dateInput : new Date(dateInput);
+    const d = asDate(dateInput);
+    if (!d) return "";
     const base = { timeZone: "America/Sao_Paulo", day: "2-digit", month: "long", year: "numeric" };
     const opts = comHora ? { ...base, hour: "2-digit", minute: "2-digit", hour12: false } : base;
     const s = new Intl.DateTimeFormat("pt-BR", opts).format(d);
@@ -63,8 +68,10 @@ module.exports = function (eleventyConfig) {
   });
 
   eleventyConfig.addFilter("monthYearPt", (yyyyMm) => {
-    const [y, m] = String(yyyyMm).split("-");
-    const d = new Date(Date.UTC(parseInt(y, 10), parseInt(m, 10) - 1, 1));
+    const parts = monthKeyParts(yyyyMm);
+    if (!parts) return String(yyyyMm || "");
+    const d = new Date(Date.UTC(parts.y, parts.m - 1, 1));
+    if (isNaN(d)) return String(yyyyMm || "");
     const s = new Intl.DateTimeFormat("pt-BR", {
       timeZone: "America/Sao_Paulo",
       month: "long",
@@ -74,19 +81,19 @@ module.exports = function (eleventyConfig) {
   });
 
   //
-  // CORE SETTINGS (Option 2: layouts at _includes)
+  // Core settings (Option 2: layouts at _includes)
   //
   return {
     dir: {
       input: "src",
       output: "public",
-      includes: "_includes",      // partials live here
-      layouts: "_includes/layouts"        // <-- layouts root is _includes
+      includes: "_includes",
+      layouts: "_includes", // allows layout: layouts/post.njk
     },
     pathPrefix: "/",
     templateFormats: ["njk", "md", "html"],
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
-    dataTemplateEngine: "njk"
+    dataTemplateEngine: "njk",
   };
 };
