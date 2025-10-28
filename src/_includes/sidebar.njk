@@ -4,9 +4,9 @@
     {% for monthGroup in collections.postsByMonth %}
       {% set monthKey = monthGroup.month %}
       <li>
-        <a href="/blog/archive/{{ monthKey }}/">
-          {{ monthKey | monthYear }}  {# e.g. "October 2025" #}
-        </a>
+      <a href="{{ ('/blog/archive/' + m.month + '/') | url }}">{{ m.month | monthYearPt }}</a>
+        {{ m.month | monthYearPt }}
+      </a>
       </li>
     {% endfor %}
   </ul>

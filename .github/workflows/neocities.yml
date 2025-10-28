@@ -22,6 +22,6 @@ jobs:
       - name: Deploy to Neocities
         uses: bcomnes/deploy-to-neocities@v3
         with:
-          api_token: ${{ secrets.NEOCITIES_API_TOKEN }}
+          api_key: ${{ secrets.NEOCITIES_API_TOKEN }}
           dist_dir: public      # folder to deploy (our Eleventy output)
           cleanup: true         # remove files on Neocities that are not in our build

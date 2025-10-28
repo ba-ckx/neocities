@@ -32,6 +32,14 @@
   --sidebar-width: 300px;
 }
 
+/* ex.: títulos do blog, datas, itens do arquivo/arquivo lateral */
+.blog-index h1, .blog-index h2,
+.archive-page h1, .post .meta,
+.archives-list a {
+  text-transform: lowercase;
+}
+
+
 /* -------------------------------------------------------- */
 /* BASICS */
 /* -------------------------------------------------------- */
