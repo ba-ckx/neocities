@@ -88,7 +88,7 @@ module.exports = function (eleventyConfig) {
       input: "src",
       output: "public",
       includes: "_includes",
-      layouts: "_includes", // allows layout: layouts/post.njk
+      layouts: "_includes/layouts", // allows layout: layouts/post.njk
     },
     pathPrefix: "/",
     templateFormats: ["njk", "md", "html"],
